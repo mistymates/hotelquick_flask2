@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Provider Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>Welcome, Provider!</h2>
+    <h3>Your Reservations</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Reservation ID</th>
+                <th>User ID</th>
+                <th>Destination ID</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.user_id }}</td>
+                <td>{{ reservation.destination_id }}</td>
+                <td>{{ reservation.status }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('revoke_reservation', reservation_id=reservation.id) }}">
+                        <button type="submit" class="btn btn-danger">Revoke</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

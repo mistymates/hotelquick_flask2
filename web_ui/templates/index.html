@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}HOTELQUICK – Your Hotel Booking Companion{% endblock %}
+
+{% block content %}
+<div class="index-page">
+
+  <!-- “Ready to Book Your Stay?” moved to top as hero -->
+  <div class="cta-section py-5 text-center">
+    <div class="cta-content p-4 rounded">
+      <h2 class="display-5 mb-3">Ready to Book Your Stay?</h2>
+      <p class="lead mb-4">Find the best hotel for your trip today with HOTELQUICK</p>
+      <div>
+        <a href="{{ url_for('destinations') }}" class="btn btn-primary btn-lg">Explore Hotels</a>
+        {% if not session.get('user') %}
+          <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg ms-2">Sign Up Now</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section py-5">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-4 mb-4">
+          <div class="feature-card p-4 rounded shadow-sm">
+            <i class="fas fa-hotel fa-3x text-primary mb-3"></i>
+            <h3>Top Rated Hotels</h3>
+            <p>Handpicked for quality, comfort, and service.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card p-4 rounded shadow-sm">
+            <i class="fas fa-calendar-check fa-3x text-primary mb-3"></i>
+            <h3>Seamless Booking</h3>
+            <p>Reserve your room in minutes with our secure system.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card p-4 rounded shadow-sm">
+            <i class="fas fa-headset fa-3x text-primary mb-3"></i>
+            <h3>24/7 Assistance</h3>
+            <p>Our team is always ready to help you during your stay.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popular Hotels Section -->
+  <div class="popular-destinations py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">Popular Hotels</h2>
+      {% if destinations %}
+        <div class="row">
+          {% for destination in destinations[:3] %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 shadow-sm destination-highlight">
+                <img src="{{ image_url }}" class="card-img-top" alt="{{ destination.name }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ destination.name }}</h5>
+                  <p class="card-text">
+                    {{ destination.description[:100] }}{% if destination.description|length > 100 %}…{% endif %}
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-info text-dark">{{ destination.duration }}</span>
+                    <span class="text-primary fw-bold">
+                      Rp {{ "{:,}".format(destination.price) }}
+                    </span>
+                  </div>
+                </div>
+                <div class="card-footer bg-white">
+                  <div class="d-grid">
+                    <a href="{{ url_for('booking', destination_id=destination.id) }}"
+                       class="btn btn-primary">Book Room</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+          <a href="{{ url_for('destinations') }}" class="btn btn-outline-primary">
+            View All Hotels
+          </a>
+        </div>
+      {% else %}
+        <div class="text-center py-5">
+          <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+          <h3>No hotels available</h3>
+          <p>Please check back later.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div class="testimonials py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">What Our Guests Say</h2>
+      <div class="row">
+        <!-- Testimonial 1 -->
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 testimonial-card">
+            <div class="card-body">
+              <div class="testimonial-rating mb-2">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+              </div>
+              <p class="card-text testimonial-text">
+                “Booking with HOTELQUICK was so easy! Our hotel was clean and centrally located.”
+              </p>
+              <div class="testimonial-author d-flex align-items-center">
+                <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
+                <div>
+                  <h6 class="mb-0">Sarah Johnson</h6>
+                  <small class="text-muted">Stayed in Jakarta</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Testimonial 2 -->
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 testimonial-card">
+            <div class="card-body">
+              <div class="testimonial-rating mb-2">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star-half-alt text-warning"></i>
+              </div>
+              <p class="card-text testimonial-text">
+                “Smooth check-in, great amenities, and friendly service.” 
+              </p>
+              <div class="testimonial-author d-flex align-items-center">
+                <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
+                <div>
+                  <h6 class="mb-0">Michael Thompson</h6>
+                  <small class="text-muted">Stayed in Bali</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Testimonial 3 -->
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 testimonial-card">
+            <div class="card-body">
+              <div class="testimonial-rating mb-2">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+              </div>
+              <p class="card-text testimonial-text">
+                “Excellent location and service—will book with HOTELQUICK again!” 
+              </p>
+              <div class="testimonial-author d-flex align-items-center">
+                <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
+                <div>
+                  <h6 class="mb-0">Amanda Rodriguez</h6>
+                  <small class="text-muted">Stayed in Yogyakarta</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .cta-section {
+    background: 
+      linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1950&q=80')
+      center/cover no-repeat;
+    color: white;
+    height: 30vh;
+    display: center;
+    width: 100%;
+  }
+  .cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .feature-card {
+    height: 100%;
+    transition: transform 0.3s;
+  }
+  .feature-card:hover {
+    transform: translateY(-10px);
+  }
+  .destination-highlight {
+    transition: transform 0.3s;
+  }
+  .destination-highlight:hover {
+    transform: translateY(-5px);
+  }
+  .testimonial-card {
+    border-top: 3px solid #007bff;
+  }
+  .testimonial-text {
+    font-style: italic;
+  }
+</style>
+{% endblock %}

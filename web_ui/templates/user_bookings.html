@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}My Reservations - HOTELQUICK{% endblock %}
+{% block content %}
+<div class="reservations-page">
+    <div class="container py-4">
+        <h1 class="mb-4">My Reservations</h1>
+        
+        {% if bookings %}
+            <div class="row">
+                {% for booking in bookings %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Reservation #{{ booking.id }}</h5>
+                                <span class="badge bg-success">Confirmed</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <h6>Hotel Name:</h6>
+                                    {% if booking.destination_name is defined %}
+                                        <p class="mb-1">{{ booking.destination_name }}</p>
+                                    {% elif booking.destination is defined %}
+                                        <p class="mb-1">{{ booking.destination.name }}</p>
+                                    {% elif booking.destination_id is defined %}
+                                        <p class="mb-1">Hotel ID: {{ booking.destination_id }}</p>
+                                    {% else %}
+                                        <p class="mb-1">Not available</p>
+                                    {% endif %}
+                                    {% if booking.duration is defined %}
+                                        <span class="badge bg-info text-dark">{{ booking.duration }}</span>
+                                    {% elif booking.destination is defined and booking.destination.duration is defined %}
+                                        <span class="badge bg-info text-dark">{{ booking.destination.duration }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h6>Check-in Date:</h6>
+                                    <p>{{ booking.travel_date }}</p>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h6>Guests:</h6>
+                                    <p>{{ booking.passengers }} guest(s)</p>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h6>Total Price:</h6>
+                                    {% if booking.total_price is defined %}
+                                        <p class="fw-bold">Rp {{ "{:,}".format(booking.total_price) }}</p>
+                                    {% elif booking.price is defined %}
+                                        <p class="fw-bold">Rp {{ "{:,}".format(booking.price) }}</p>
+                                    {% else %}
+                                        <p class="fw-bold">Not available</p>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h6>Reservation Date:</h6>
+                                    {% if booking.booking_date is defined %}
+                                        <p>{{ booking.booking_date }}</p>
+                                    {% else %}
+                                        <p>Not available</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ url_for('booking_detail', booking_id=booking.id) }}" class="btn btn-primary btn-sm">
+                                    View Reservation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                You don’t have any reservations yet. 
+                <a href="{{ url_for('destinations') }}">Explore our hotels</a> and book your next stay!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
